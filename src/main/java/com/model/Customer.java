@@ -1,6 +1,7 @@
 package com.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table

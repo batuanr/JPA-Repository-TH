@@ -11,6 +11,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
@@ -36,22 +37,31 @@ public class CustomerController {
     }
 
     @PostMapping("/create-customer")
-    public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer) {
+    public ModelAndView saveCustomer(@ModelAttribute("customer") Customer customer, RedirectAttributes redirectAttributes) {
         customerService.save(customer);
-        ModelAndView modelAndView = new ModelAndView("/customer/create");
-        modelAndView.addObject("customer", new Customer());
-        modelAndView.addObject("message", "New customer created successfully");
+        ModelAndView modelAndView = new ModelAndView("redirect:/customers");
+        redirectAttributes.addFlashAttribute("message", "New customer created successfully");
         return modelAndView;
     }
 
     @GetMapping("/customers")
-    public ModelAndView listCustomers(@RequestParam("search") Optional<String> search,@PageableDefault(value = 5) Pageable pageable){
+    public ModelAndView listCustomers(Optional<String> search,@PageableDefault(value = 5) Pageable pageable){
         Page<Customer> customers;
         if(search.isPresent()){
             customers = customerService.findAllByFirstName(search.get(), pageable);
-        } else {
-            customers = customerService.findAll(pageable);
         }
+
+        else {
+                customers = customerService.findAll(pageable);
+        }
+
+        ModelAndView modelAndView = new ModelAndView("/customer/list");
+        modelAndView.addObject("customers", customers);
+        return modelAndView;
+    }
+    @PostMapping("/search")
+    public ModelAndView  serchBYAddress(@ModelAttribute Address address, Pageable pageable){
+        Page<Customer> customers = customerService.findAllByAddress(address, pageable);
         ModelAndView modelAndView = new ModelAndView("/customer/list");
         modelAndView.addObject("customers", customers);
         return modelAndView;
@@ -71,11 +81,10 @@ public class CustomerController {
     }
 
     @PostMapping("/edit-customer")
-    public ModelAndView updateCustomer(@ModelAttribute("customer") Customer customer) {
+    public ModelAndView updateCustomer(@ModelAttribute("customer") Customer customer, RedirectAttributes redirectAttributes) {
         customerService.save(customer);
-        ModelAndView modelAndView = new ModelAndView("/customer/edit");
-        modelAndView.addObject("customer", customer);
-        modelAndView.addObject("message", "Customer updated successfully");
+        ModelAndView modelAndView = new ModelAndView("redirect:/customers");
+        redirectAttributes.addFlashAttribute("message", "Customer updated successfully");
         return modelAndView;
     }
 

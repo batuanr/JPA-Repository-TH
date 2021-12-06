@@ -26,8 +26,9 @@
     </tr>
     <tr>
       <td>
-        <select name="" id="" th:field="*{address}">
-          <option th:each="address : ${addressList}" th:value="${address.id}" th:text="${address.name}"></option>
+        <select name="address">
+          <option th:each="a : ${addressList}" th:value="${a.id}" th:text="${a.name}"
+                  th:selected="(${customer.address}) and (${a.id} == *{address.id})"></option>
         </select>
       </td>
     </tr>

@@ -6,14 +6,24 @@
 </head>
 <body>
 <form>
-    Search by first name:
+    <p>Search by first name:</p>
     <input name="search" type="text"/>
+    <input type="submit" value="Search"/>
+</form>
+<form action="/search" method="post">
+    <select th:name="address" th:id="address"  >
+        <option >fgefgfdg</option>
+        <option th:each="address : ${addressList}" th:value="${address.id}" th:text="${address.name}"></option>
+    </select>
     <input type="submit" value="Search"/>
 </form>
 <br/>
 
 <a href="/create-customer">Create new customer</a>
 <h1>Customers</h1>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
 <table border="1">
     <tr>
         <th>First name</th>

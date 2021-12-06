@@ -1,18 +1,23 @@
 package com.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table
-public class Address {
+public class Address  {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @OneToMany(targetEntity = Customer.class)
+    @OneToMany(targetEntity = Customer.class, cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Customer> customers;
 
     public Address() {

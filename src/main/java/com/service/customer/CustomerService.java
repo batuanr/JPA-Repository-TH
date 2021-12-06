@@ -1,5 +1,6 @@
 package com.service.customer;
 
+import com.model.Address;
 import com.model.Customer;
 import com.repository.ICustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,10 @@ public class CustomerService implements ICustomerService{
     @Override
     public Page<Customer> findAllByFirstName(String firstName, Pageable pageable) {
         return customerRepository.findAllByFirstNameContaining(firstName, pageable);
+    }
+
+    @Override
+    public Page<Customer> findAllByAddress(Address address, Pageable pageable) {
+        return customerRepository.findAllByAddress(address, pageable);
     }
 }
