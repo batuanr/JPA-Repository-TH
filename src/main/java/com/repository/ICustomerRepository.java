@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface ICustomerRepository extends PagingAndSortingRepository<Customer, Long> {
     Page<Customer> findAllByFirstNameContaining(String firstName, Pageable pageable);
     Page<Customer> findAllByAddress(Address address, Pageable pageable);
+    Iterable<Customer> findAllByAddress(Address address);
 }

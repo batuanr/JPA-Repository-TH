@@ -49,4 +49,9 @@ public class CustomerService implements ICustomerService{
     public Page<Customer> findAllByAddress(Address address, Pageable pageable) {
         return customerRepository.findAllByAddress(address, pageable);
     }
+
+    @Override
+    public Iterable<Customer> findAllByAddress(Address address) {
+        return customerRepository.findAllByAddress(address);
+    }
 }

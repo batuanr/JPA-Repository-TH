@@ -1,12 +1,17 @@
 package com.controller;
 
+import com.model.Address;
 import com.model.Customer;
+import com.service.address.IAddressService;
 import com.service.customer.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,6 +20,9 @@ public class CustomerRestController {
 
     @Autowired
     ICustomerService customerService;
+
+    @Autowired
+    IAddressService addressService;
 
     @GetMapping
     public ResponseEntity<Iterable<Customer>> findAll(){
@@ -54,5 +62,15 @@ public class CustomerRestController {
         }
         customerService.remove(id);
         return new ResponseEntity<>(customerOptional.get(), HttpStatus.NO_CONTENT);
+    }
+    @GetMapping("/findByAddress/{id}")
+    public ResponseEntity<Iterable<Customer>> findCustomerByAddress(@PathVariable Long id, Pageable pageable){
+        Optional<Address> address = addressService.findById(id);
+
+        return new ResponseEntity<>(customerService.findAllByAddress(address.get()) ,HttpStatus.OK);
+    }
+    @GetMapping("/findOne/{id}")
+    public ResponseEntity<Customer> findOne(@PathVariable Long id){
+        return new ResponseEntity<>(customerService.findById(id).get(), HttpStatus.OK);
     }
 }
