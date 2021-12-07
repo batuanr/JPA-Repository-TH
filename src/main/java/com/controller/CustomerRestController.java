@@ -46,7 +46,7 @@ public class CustomerRestController {
     }
 
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/edit/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
         Optional<Customer> customerOptional = customerService.findById(id);
         if (!customerOptional.isPresent()) {

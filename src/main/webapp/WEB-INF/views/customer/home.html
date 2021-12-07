@@ -278,6 +278,7 @@
                 },
                 success: getHome
             })
+            $('#addEmployeeModal').modal('hide');
             event.preventDefault();
         }
         function getHome(){
@@ -351,8 +352,10 @@
                 },
                 success:function (data){
                     document.getElementById('editCustomer').innerHTML= customerEdit(data);
-                }
+                },
+
             })
+
         }
         function customerEdit(customer){
             return `<div class="modal-header">`+
@@ -360,7 +363,7 @@
                 `<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>`+
             `</div>`+
             `<div class="modal-body">`+
-                `<div class="form-group">`+
+                `<div class="form-group" hidden>`+
                     `<label>id</label>`+
                     `<input type="text" value="${customer.id}" class="form-control" required id="customerId">`+
                 `</div>`+
@@ -387,7 +390,6 @@
         }
         function getAddress(){
            let content =  document.getElementById('address').innerHTML
-            alert(content);
            return content;
         }
         function edit(){
@@ -397,7 +399,7 @@
             let address = $('#address2').val();
             let customer = {id: id,firstName: firstName, lastName: lastName, address: {id:address}};
             $.ajax({
-                type:"POST",
+                type:"PUT",
                 url:"api/customers/edit/" + id,
                 data:JSON.stringify(customer),
 
@@ -405,8 +407,11 @@
                     "Accept": "application/json",
                     "Content-type": "application/json"
                 },
-                success: getHome
+                success: getHome,
+
+
             })
+            $('#editEmployeeModal').modal('hide');
             event.preventDefault();
         }
     </script>
@@ -488,7 +493,7 @@
                 </div>
                 <div class="modal-body">
                     <input type="text" hidden id="id">
-                    <div class="form-group">
+                    <div class="form-group" >
                         <label>FirstName</label>
                         <input type="text" class="form-control" required id="firstName">
                     </div>
