@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Bootstrap CRUD Data Table for Database with Modal Form</title>
+    <title>Customer</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -278,7 +278,7 @@
                 },
                 success: getHome
             })
-            $('#addEmployeeModal').modal('hide');
+            $('#addNewCustomer').modal('hide');
             event.preventDefault();
         }
         function getHome(){
@@ -305,10 +305,10 @@
                 `<td>${customer.lastName}</td>`+
             `<td >${customer.address.name}</td>`+
                 `<td>`+
-                `<a href="#editEmployeeModal" class="edit" onclick="editForm(this)" id="${customer.id}" data-toggle="modal">`+
+                `<a href="#formEditCustomer" class="edit" onclick="editForm(this)" id="${customer.id}" data-toggle="modal">`+
                 `<i class="material-icons"  data-toggle="tooltip" title="Edit">&#xE254;</i>`+
                 `</a>`+
-                `<a href="${customer.id}" onclick="deleteCustomer(this)" class="delete" data-toggle="modal">`+
+                `<a href="#deleteCustomer" onclick="getFormDelete(this)" class="delete" id="${customer.id}" data-toggle="modal">`+
                 `<i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i>`+
                 `</a>`+
                 `</td></tr>`;
@@ -327,6 +327,12 @@
         //     })
         //     event.preventDefault();
         // })
+        function getFormDelete(a){
+            let id = a.getAttribute("id");
+            let content = `<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">`+
+                `<input type="submit" href="` +id+ `" onclick="deleteCustomer(this)" class="btn btn-danger" value="Delete">`
+            document.getElementById('delete').innerHTML = content;
+        }
         function deleteCustomer(a){
             let id = a.getAttribute("href");
             $.ajax({
@@ -339,6 +345,7 @@
                 success:getHome
 
             })
+            $('#deleteCustomer').modal('hide');
             event.preventDefault();
         }
         function editForm(a){
@@ -411,7 +418,7 @@
 
 
             })
-            $('#editEmployeeModal').modal('hide');
+            $('#formEditCustomer').modal('hide');
             event.preventDefault();
         }
     </script>
@@ -423,11 +430,11 @@
             <div class="table-title">
                 <div class="row">
                     <div class="col-sm-6">
-                        <h2>Manage <b>Employees</b></h2>
+                        <h2>Manage <b>Customer</b></h2>
                     </div>
                     <div class="col-sm-6">
-                        <a href="#addEmployeeModal" class="btn btn-success"  data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
-                        <a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
+                        <a href="#addNewCustomer" class="btn btn-success"  data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
+                        <a href="#deleteCustomer" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>
                     </div>
                 </div>
             </div>
@@ -459,9 +466,9 @@
                     <td th:text="${c.lastName}"></td>
                     <td th:text="${c.address.name}"></td>
                     <td>
-                        <a href="#editEmployeeModal" class="edit" onclick="editForm(this)" th:id="${c.id}" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                        <a href="#formEditCustomer" class="edit" onclick="editForm(this)" th:id="${c.id}" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
 <!--                        <a href="#deleteEmployeeModal" class="delete" th:name="${c.id}" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>-->
-                        <a th:href="${c.id}" onclick="deleteCustomer(this)" class="delete"  data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                        <a href="#deleteCustomer" onclick="getFormDelete(this)" class="delete" th:id="${c.id}"  data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
                     </td>
                 </tr>
 
@@ -483,7 +490,7 @@
     </div>
 </div>
 <!-- Edit Modal HTML -->
-<div id="addEmployeeModal" class="modal fade">
+<div id="addNewCustomer" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="addcustomer">
@@ -510,14 +517,14 @@
                 </div>
                 <div class="modal-footer">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                    <input type="submit" class="btn btn-success" onclick="save()" value="Add">
+                    <input  type="submit" class="btn btn-success" onclick="save()" value="Add">
                 </div>
             </form>
         </div>
     </div>
 </div>
 <!-- Edit Modal HTML -->
-<div id="editEmployeeModal" class="modal fade">
+<div id="formEditCustomer" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form id="editCustomer">
@@ -527,19 +534,19 @@
     </div>
 </div>
 <!-- Delete Modal HTML -->
-<div id="deleteEmployeeModal" class="modal fade">
+<div id="deleteCustomer" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form>
                 <div class="modal-header">
-                    <h4 class="modal-title">Delete Employee</h4>
+                    <h4 class="modal-title">Delete Customer</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
                     <p>Are you sure you want to delete these Records?</p>
                     <p class="text-warning"><small>This action cannot be undone.</small></p>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" id="delete">
                     <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
                     <input type="submit" class="btn btn-danger" value="Delete">
                 </div>
