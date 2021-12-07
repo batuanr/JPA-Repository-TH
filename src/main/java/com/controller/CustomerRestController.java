@@ -5,13 +5,11 @@ import com.model.Customer;
 import com.service.address.IAddressService;
 import com.service.customer.ICustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,10 +22,14 @@ public class CustomerRestController {
     @Autowired
     IAddressService addressService;
 
-    @GetMapping
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<Iterable<Customer>> findAll(){
         return new ResponseEntity<>(customerService.findAll(), HttpStatus.OK);
     }
+//    @GetMapping
+//    public ResponseEntity<Page<Customer>> findAll(Pageable pageable){
+//        return new ResponseEntity<>(customerService.findAll(pageable), HttpStatus.OK);
+//    }
     @GetMapping("/{id}")
     public ResponseEntity<Customer> findCustomerById(@PathVariable Long id) {
         Optional<Customer> customerOptional = customerService.findById(id);
@@ -43,7 +45,8 @@ public class CustomerRestController {
         return new ResponseEntity<>( HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+
+    @PostMapping("/edit/{id}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody Customer customer) {
         Optional<Customer> customerOptional = customerService.findById(id);
         if (!customerOptional.isPresent()) {

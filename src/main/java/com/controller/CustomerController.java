@@ -45,7 +45,7 @@ public class CustomerController {
     }
 
     @GetMapping("/customers")
-    public ModelAndView listCustomers(Optional<String> search,@PageableDefault(value = 5) Pageable pageable){
+    public ModelAndView listCustomers(Optional<String> search, Pageable pageable){
         Page<Customer> customers;
         if(search.isPresent()){
             customers = customerService.findAllByFirstName(search.get(), pageable);
@@ -55,7 +55,7 @@ public class CustomerController {
                 customers = customerService.findAll(pageable);
         }
 
-        ModelAndView modelAndView = new ModelAndView("/customer/list");
+        ModelAndView modelAndView = new ModelAndView("/customer/home");
         modelAndView.addObject("customers", customers);
         return modelAndView;
     }
