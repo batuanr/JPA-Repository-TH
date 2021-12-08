@@ -42,7 +42,7 @@ public class CustomerService implements ICustomerService{
 
     @Override
     public Page<Customer> findAllByFirstName(String firstName, Pageable pageable) {
-        return customerRepository.findAllByFirstNameContaining(firstName, pageable);
+        return customerRepository.findAllByNameContaining(firstName, pageable);
     }
 
     @Override
