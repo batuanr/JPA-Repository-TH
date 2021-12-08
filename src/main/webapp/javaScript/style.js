@@ -186,17 +186,53 @@ function edit(){
 
 }
 function getPage(page){
+    if ( page.totalPages > (page.pageable.pageNumber + 1) ){
         return `<ul class="pagination">`+
             `<li class="page-item disabled">`+
-            `<a href="/customers?page=${page.pageable.pageNumber - 1}" >Previous</a>`+
+            `<a href="${page.pageable.pageNumber - 1}" onclick="page(this)">Previous</a>`+
             `</li>`+
             `<li class="page-item"><span>${page.pageable.pageNumber + 1}</span>/`+
             `<span>${page.totalPages}</span>`+
             `</li>`+
-            `<li class="page-item"><a href="/customers?page=${page.pageable.pageNumber + 1}"class="page-link">Next</a>`+
+            `<li class="page-item"><a href="${page.pageable.pageNumber + 1}" onclick="page(this)" class="page-link">Next</a>`+
             `</li>`+
             `</ul>`
+    }
+    else {
+        return `<ul class="pagination">`+
+            `<li class="page-item disabled">`+
+            `<a href="${page.pageable.pageNumber - 1}" onclick="page(this)">Previous</a>`+
+            `</li>`+
+            `<li class="page-item"><span>${page.pageable.pageNumber + 1}</span>/`+
+            `<span>${page.totalPages}</span>`+
+            `</ul>`
+    }
+}
+function page(a){
+    let page = a.getAttribute("href");
+    $.ajax({
+        type:"GET",
+        url: "api/customers?page="+ page,
+        headers:{
+            "Accept": "application/json",
+            "Content-type": "application/json"
+        },
+        success : function (data){
+            let content = "";
+            for (let i = 0; i < data.content.length; i++){
 
+                content += '<tr><td>' +
+                    '<span class="custom-checkbox">'+
+                    '<input type="checkbox" id="checkbox1" name="options[]" value="1">'+
+                    '<label  for="checkbox1"></label>'+
+                    '</span>'+
+                    '</td>'+
+                    getCustomer(data.content[i])
+            }
+            document.getElementById('customer').innerHTML = content;
+            document.getElementById('page').innerHTML = getPage(data);
 
-
+        }
+    })
+    event.preventDefault();
 }
